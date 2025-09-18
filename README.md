@@ -1,4 +1,4 @@
-# Projeto ONG
+# Projeto Stem que inclui
 
 Este é um projeto [Next.js](https://nextjs.org) criado com [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app) para uma organização não governamental.
 
