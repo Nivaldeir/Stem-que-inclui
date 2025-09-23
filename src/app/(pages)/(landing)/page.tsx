@@ -1,8 +1,11 @@
+"use client";
 import { Header } from "@/shared/components/header";
 import { Globe } from "./_components/globe";
-import { DraggableCardContainer } from "@/components/ui/draggable-card";
-import { DraggableCardBody } from "@/components/ui/draggable-card";
-
+import { DraggableCardContainer } from "@/shared/components/ui/draggable-card";
+import { DraggableCardBody } from "@/shared/components/ui/draggable-card";
+import { useRef, useState } from "react";
+import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
 const items = [
   {
@@ -50,13 +53,39 @@ const items = [
 ];
 
 export default function Home() {
+  const [loading, setLoading] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    try {
+      e.preventDefault();
+      const formData = new FormData(e.target as HTMLFormElement);
+      const data = Object.fromEntries(formData);
+      setLoading(true);
+
+      await fetch("/api/email", {
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+
+      formRef.current?.reset();
+      toast.success("Mensagem enviada com sucesso");
+
+    } catch (error) {
+      console.error("Erro ao enviar:", error);
+      toast.error("Erro ao enviar mensagem, tente novamente mais tarde");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="w-full h-full">
       <div className=" z-10">
-      <Header />
+        <Header />
       </div>
-       <main className="bg-background pt-20">
-         <section className="container mx-auto px-4 py-8">
+      <main className="bg-background pt-20">
+        <section className="container mx-auto px-4 py-8">
           <div className="">
             <div className="text-center">
               <h1 className="text-4xl font-bold text-foreground mb-4">
@@ -99,7 +128,7 @@ export default function Home() {
             </div>
           </div>
         </section>
-        
+
         <section id="about" className="container mx-auto px-4 py-8">
           <h2 className="text-xl md:text-2xl lg:text-4xl text-white font-bold inter-var text-center mb-8">
             Transformando Vidas Através da Inclusão Digital
@@ -230,16 +259,16 @@ export default function Home() {
               <h3 className="text-2xl font-semibold text-foreground mb-6">
                 Envie uma Mensagem
               </h3>
-              <form className="space-y-6">
+              <form ref={formRef} className="space-y-6" onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="nome" className="block text-sm font-medium text-foreground mb-2">
+                    <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
                       Nome Completo
                     </label>
                     <input
                       type="text"
-                      id="nome"
-                      name="nome"
+                      id="name"
+                      name="name"
                       className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-background text-foreground"
                       placeholder="Seu nome completo"
                     />
@@ -259,44 +288,44 @@ export default function Home() {
                 </div>
 
                 <div>
-                  <label htmlFor="telefone" className="block text-sm font-medium text-foreground mb-2">
+                  <label htmlFor="phone" className="block text-sm font-medium text-foreground mb-2">
                     Telefone
                   </label>
                   <input
                     type="tel"
-                    id="telefone"
-                    name="telefone"
+                    id="phone"
+                    name="phone"
                     className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-background text-foreground"
                     placeholder="(11) 99999-9999"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="assunto" className="block text-sm font-medium text-foreground mb-2">
+                  <label htmlFor="subject" className="block text-sm font-medium text-foreground mb-2">
                     Assunto
                   </label>
                   <select
-                    id="assunto"
-                    name="assunto"
+                    id="subject"
+                    name="subject"
                     className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-background text-foreground"
                   >
                     <option value="">Selecione um assunto</option>
-                    <option value="voluntariado">Voluntariado</option>
-                    <option value="parceria">Parceria</option>
-                    <option value="doacao">Doação</option>
-                    <option value="duvida">Dúvida</option>
-                    <option value="sugestao">Sugestão</option>
-                    <option value="outro">Outro</option>
+                    <option value="volunteering">Voluntariado</option>
+                    <option value="partnership">Parceria</option>
+                    <option value="donation">Doação</option>
+                    <option value="question">Dúvida</option>
+                    <option value="suggestion">Sugestão</option>
+                    <option value="other">Outro</option>
                   </select>
                 </div>
 
                 <div>
-                  <label htmlFor="mensagem" className="block text-sm font-medium text-foreground mb-2">
+                  <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2">
                     Mensagem
                   </label>
                   <textarea
-                    id="mensagem"
-                    name="mensagem"
+                    id="message"
+                    name="message"
                     rows={5}
                     className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-background text-foreground resize-none"
                     placeholder="Conte-nos como podemos ajudar..."
@@ -307,7 +336,9 @@ export default function Home() {
                   type="submit"
                   className="w-full bg-primary text-primary-foreground py-3 px-6 rounded-lg font-semibold hover:bg-primary/90 transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2"
                 >
-                  Enviar Mensagem
+                  {loading ?
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    : "Enviar Mensagem"}
                 </button>
               </form>
             </div>
