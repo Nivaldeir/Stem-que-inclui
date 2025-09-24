@@ -41,6 +41,6 @@ jobs:
           script: |
             mkdir -p /home/deploy
             cd /home/deploy
-            git pull || git clone https://github.com/seu_usuario/seu_repositorio.git .
+            git pull || git clone https://github.com/Nivaldeir/Stem-que-inclui.git .
             docker compose pull
             docker compose up -d
