@@ -1,13 +1,8 @@
 version: "3.9"
 services:
   app:
-    image: ${DOCKER_USERNAME}/steam-que-inclui:latest
+    image: nivaldeir/steam-que-inclui:latest
     container_name: steam-que-inclui
     ports:
       - "3000:3000"
     restart: always
-    environment:
-      - NODE_ENV=production
-      - GMAIL_USER=${GMAIL_USER}
-      - GMAIL_APP_PASS=${GMAIL_APP_PASS}
-      - EMAIL_TO_RECEIVE=${EMAIL_TO_RECEIVE}
