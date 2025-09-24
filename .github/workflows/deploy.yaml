@@ -6,10 +6,10 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     environment: Production
-    
+
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
@@ -25,7 +25,13 @@ jobs:
 
       - name: Push da imagem
         run: docker push ${{ secrets.DOCKER_USERNAME }}/steam-que-inclui:latest
+        
+  deploy:
+    runs-on: ubuntu-latest
+    environment: Production
 
+    needs: build
+    steps:
       - name: Deploy no servidor via SSH
         uses: appleboy/ssh-action@v1.0.0
         with:
