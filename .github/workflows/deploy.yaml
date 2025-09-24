@@ -39,6 +39,8 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
+            mkdir -p /home/deploy
             cd /home/deploy
+            git pull || git clone https://github.com/seu_usuario/seu_repositorio.git .
             docker compose pull
             docker compose up -d
