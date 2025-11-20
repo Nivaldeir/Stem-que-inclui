@@ -64,6 +64,12 @@ const Navigation = () => {
               Impacto
             </button>
             <button
+              onClick={() => scrollToSection("voluntarios")}
+              className="text-foreground hover:text-primary transition-colors"
+            >
+              Voluntários
+            </button>
+            <button
               onClick={() => scrollToSection("contato")}
               className="text-foreground hover:text-primary transition-colors"
             >
@@ -105,6 +111,12 @@ const Navigation = () => {
                 className="text-left text-foreground hover:text-primary transition-colors"
               >
                 Impacto
+              </button>
+              <button
+                onClick={() => scrollToSection("voluntarios")}
+                className="text-left text-foreground hover:text-primary transition-colors"
+              >
+                Voluntários
               </button>
               <button
                 onClick={() => scrollToSection("contato")}
